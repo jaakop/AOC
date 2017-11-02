@@ -1,8 +1,8 @@
 ﻿<Properties StartupItem="AOC.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\codeandweb.com\Readme.txt">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PlayerMovement.cs">
     <Files>
-      <File FileName="Assets\codeandweb.com\Readme.txt" Line="1" Column="1" />
+      <File FileName="Assets\PlayerMovement.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
