@@ -28,12 +28,25 @@ public class PlayerMovement : MonoBehaviour {
 
     public bool isAttacking = false;
 
+    public bool dealtDamage = false;
+
     void Start () {
 		
 	}
 
 	void FixedUpdate () {
+
         attackTime -= Time.deltaTime;
+        CheckControls();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("you hit: " + collision.name);
+    }
+
+    private void CheckControls()
+    {
         if (Input.GetKey(Left))
         {
             rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
@@ -78,15 +91,12 @@ public class PlayerMovement : MonoBehaviour {
         {
             isAttacked = false;
         }
-        if(attackTime < 0)
+        if (attackTime < 0)
         {
             isAttacking = false;
+            dealtDamage = false;
             sword.SetActive(false);
         }
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("you hit: " + collision.name);
     }
 
 }
