@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour {
     
-    [SerializeField]
-    private GameObject player;
+    //[SerializeField]
+    //private GameObject player;
 
-    PlayerMovement playerscript;
+    //PlayerMovement playerscript;
 
     private float curHealth = 100;
 
@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour {
 
     void Start ()
     {
-        playerscript = player.GetComponent<PlayerMovement>();
+        //playerscript = player.GetComponent<PlayerMovement>();
         curHealth = startHealth;
         healthBar.enabled = false;
         healthBarBG.enabled = false;
@@ -38,14 +38,14 @@ public class EnemyController : MonoBehaviour {
         if (collision.tag == "Weapon")
         {
             Debug.Log("Enemy is in the attack zone");
-            if (playerscript.isAttacking == true)
-            {
-                if (playerscript.dealtDamage == false)
-                {
-                    TakeDamage(playerscript.damage);
-                    playerscript.dealtDamage = true;
-                }
-            }
+            //if (playerscript.isAttacking == true)
+            //{
+            //    if (playerscript.dealtDamage == false)
+            //    {
+            //        TakeDamage(playerscript.damage);
+            //        playerscript.dealtDamage = true;
+            //    }
+            //}
         }
     }
 

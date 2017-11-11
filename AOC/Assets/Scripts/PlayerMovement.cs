@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 
     [SerializeField]
+    GameObject enemy;
+
+    [SerializeField]
     Rigidbody2D rb;
 
     [SerializeField]
@@ -39,12 +42,6 @@ public class PlayerMovement : MonoBehaviour {
         attackTime -= Time.deltaTime;
         CheckControls();
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("you hit: " + collision.name);
-    }
-
     private void CheckControls()
     {
         if (Input.GetKey(Left))
@@ -98,5 +95,4 @@ public class PlayerMovement : MonoBehaviour {
             sword.SetActive(false);
         }
     }
-
 }
