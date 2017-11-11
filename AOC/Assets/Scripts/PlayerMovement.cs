@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour {
 
     [SerializeField]
+    private GameObject quitScreen;
+
+    [SerializeField]
     GameObject enemy;
 
     [SerializeField]
@@ -41,11 +44,14 @@ public class PlayerMovement : MonoBehaviour {
     private float playerSizeX;
     [SerializeField]
     private float playerSizeY;
+    [SerializeField]
+    private float minBeforeDeath = 0.1f;
 
     void Start ()
     {
         playerSizeX = transform.localScale.x;
         playerSizeY = transform.localScale.y;
+        currenHealth = startingHealth;
 	}
 
 	void FixedUpdate () {
@@ -124,6 +130,18 @@ public class PlayerMovement : MonoBehaviour {
 
         if (transform.localScale.y > playerSizeY)
             transform.localScale -= new Vector3(0, transform.localScale.y - playerSizeY, 0);
+
+        if(playerSizeX <= minBeforeDeath|| playerSizeY <= minBeforeDeath)
+        {
+            Death();
+        }
+
+    }
+
+    private void Death()
+    {
+        quitScreen.SetActive(true);
+        Time.timeScale = 0;
     }
 
 }

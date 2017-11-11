@@ -17,14 +17,26 @@ public class EnemyController : MonoBehaviour {
 
     [SerializeField]
     private float speed = 1f;
+
+    [SerializeField]
+    private float distance = 0.5f;
+
     [SerializeField]
     float damage = 10;
+
     private GameObject player;
+    private GameObject ui;
+
     private PlayerMovement playerScript;
+    private ScoreCounter scoreScript;
+
+    public float worthInPoints = 10;
+
     private bool isAttacking = false;
     private float attackWait;
     [SerializeField]
     private float attackRate;
+
     void Start ()
     {
         curHealth = startHealth;
@@ -32,6 +44,9 @@ public class EnemyController : MonoBehaviour {
         healthBarBG.enabled = false;
         player = GameObject.Find("Player");
         playerScript = player.GetComponent<PlayerMovement>();
+        ui = GameObject.Find("UI");
+        scoreScript = ui.GetComponent<ScoreCounter>();
+
     }
 
 	void FixedUpdate ()
@@ -43,8 +58,15 @@ public class EnemyController : MonoBehaviour {
     private void Move()
     {
         attackWait -= Time.deltaTime;
-        if(attackWait <= 0)
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed);
+        if (Vector3.Distance(transform.position, player.transform.position) > distance)
+        {
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed);
+        }
+        else
+        {
+            if (attackWait <= 0)
+                transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed/4f);
+        }
     }
 
     private void UpdateHealthBar()
@@ -86,6 +108,7 @@ public class EnemyController : MonoBehaviour {
     {
         Destroy(gameObject);
         Debug.Log("Enemy died!");
+        scoreScript.AddScore(worthInPoints);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
