@@ -23,14 +23,13 @@ public class PlayerAttackScript : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             enemyScript = collision.GetComponent<EnemyController>();
-            Debug.Log("enemy script founded");
+
             if (playermoverscript.isAttacking == true)
             {
                 if (playermoverscript.dealtDamage == false)
                 {
                     playermoverscript.dealtDamage = true;
                     enemyScript.TakeDamage(playermoverscript.damage);
-                    Debug.Log("Damage has been dealt");
                 }
             }
         }

@@ -4,11 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour {
-    
-    //[SerializeField]
-    //private GameObject player;
-
-    //PlayerMovement playerscript;
 
     private float curHealth = 100;
 
@@ -20,33 +15,36 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private Image healthBarBG;
 
+    [SerializeField]
+    private float speed = 1f;
+    [SerializeField]
+    float damage = 10;
+    private GameObject player;
+    private PlayerMovement playerScript;
+    private bool isAttacking = false;
+    private float attackWait;
+    [SerializeField]
+    private float attackRate;
     void Start ()
     {
-        //playerscript = player.GetComponent<PlayerMovement>();
         curHealth = startHealth;
         healthBar.enabled = false;
         healthBarBG.enabled = false;
+        player = GameObject.Find("Player");
+        playerScript = player.GetComponent<PlayerMovement>();
     }
 
-	void Update ()
+	void FixedUpdate ()
     {
         UpdateHealthBar();
+        Move();
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void Move()
     {
-        if (collision.tag == "Weapon")
-        {
-            Debug.Log("Enemy is in the attack zone");
-            //if (playerscript.isAttacking == true)
-            //{
-            //    if (playerscript.dealtDamage == false)
-            //    {
-            //        TakeDamage(playerscript.damage);
-            //        playerscript.dealtDamage = true;
-            //    }
-            //}
-        }
+        attackWait -= Time.deltaTime;
+        if(attackWait <= 0)
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed);
     }
 
     private void UpdateHealthBar()
@@ -90,5 +88,14 @@ public class EnemyController : MonoBehaviour {
         Debug.Log("Enemy died!");
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject == player)
+        {
+            attackWait = attackRate;
+            playerScript.TakeDamage(damage);
+
+        }
+    }
 
 }

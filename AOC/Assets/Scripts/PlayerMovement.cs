@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -24,24 +25,36 @@ public class PlayerMovement : MonoBehaviour {
     public KeyCode Down = KeyCode.S;
     public KeyCode AttackKey = KeyCode.Space;
 
-    [SerializeField]
-    private bool isAttacked = false;
-
     private float attackTime = 0f;
 
+    [SerializeField]
+    private bool isAttacked = false;
     public bool isAttacking = false;
-
     public bool dealtDamage = false;
 
-    void Start () {
-		
+    [Header("Health properties")]
+    [SerializeField]
+    private float startingHealth;
+    [SerializeField]
+    private float currenHealth;
+    [SerializeField]
+    private float playerSizeX;
+    [SerializeField]
+    private float playerSizeY;
+
+    void Start ()
+    {
+        playerSizeX = transform.localScale.x;
+        playerSizeY = transform.localScale.y;
 	}
 
 	void FixedUpdate () {
 
         attackTime -= Time.deltaTime;
         CheckControls();
+        UpdateScale();
     }
+
     private void CheckControls()
     {
         if (Input.GetKey(Left))
@@ -95,4 +108,22 @@ public class PlayerMovement : MonoBehaviour {
             sword.SetActive(false);
         }
     }
+
+    public void TakeDamage(float amount)
+    {
+        float damageDealtX = transform.localScale.x / amount;
+        float damageDealtY = transform.localScale.y / amount;
+        playerSizeX -= damageDealtX;
+        playerSizeY -= damageDealtY;
+    }
+
+    private void UpdateScale()
+    {
+        if (transform.localScale.x > playerSizeX)
+            transform.localScale -= new Vector3(transform.localScale.x - playerSizeX, 0, 0);
+
+        if (transform.localScale.y > playerSizeY)
+            transform.localScale -= new Vector3(0, transform.localScale.y - playerSizeY, 0);
+    }
+
 }
