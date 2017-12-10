@@ -18,6 +18,9 @@ public class PlayerMovement : MonoBehaviour {
     GameObject sword;
 
     [SerializeField]
+    GameObject swordObject;
+
+    [SerializeField]
     float movementSpeed = 10f;
 
     public float damage = 10;
@@ -37,21 +40,17 @@ public class PlayerMovement : MonoBehaviour {
 
     [Header("Health properties")]
     [SerializeField]
-    private float startingHealth;
-    [SerializeField]
-    private float currenHealth;
-    [SerializeField]
     private float playerSizeX;
     [SerializeField]
     private float playerSizeY;
     [SerializeField]
-    private float minBeforeDeath = 0.1f;
+    private float minBeforeDeath;
 
     void Start ()
     {
         playerSizeX = transform.localScale.x;
         playerSizeY = transform.localScale.y;
-        currenHealth = startingHealth;
+        minBeforeDeath = playerSizeX / 2;
 	}
 
 	void FixedUpdate () {
@@ -66,12 +65,12 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(Left))
         {
             rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-            transform.eulerAngles = new Vector3(0, 0, 180);
+            swordObject.transform.eulerAngles = new Vector3(0, 0, 180);
         }
         else if (Input.GetKey(Right))
         {
             rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            swordObject.transform.eulerAngles = new Vector3(0, 0, 0);
         }
         else
         {
@@ -81,12 +80,12 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(Up))
         {
             rb.velocity = new Vector2(rb.velocity.x, movementSpeed);
-            transform.eulerAngles = new Vector3(0, 0, 90);
+            swordObject.transform.eulerAngles = new Vector3(0, 0, 90);
         }
         else if (Input.GetKey(Down))
         {
             rb.velocity = new Vector2(rb.velocity.x, -movementSpeed);
-            transform.eulerAngles = new Vector3(0, 0, 270);
+            swordObject.transform.eulerAngles = new Vector3(0, 0, 270);
         }
         else
         {
@@ -117,8 +116,9 @@ public class PlayerMovement : MonoBehaviour {
 
     public void TakeDamage(float amount)
     {
-        float damageDealtX = transform.localScale.x / amount;
-        float damageDealtY = transform.localScale.y / amount;
+        float damageDealtX = amount/100;
+        float damageDealtY = amount/100;
+        
         playerSizeX -= damageDealtX;
         playerSizeY -= damageDealtY;
     }
@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour {
         if (transform.localScale.y > playerSizeY)
             transform.localScale -= new Vector3(0, transform.localScale.y - playerSizeY, 0);
 
-        if(playerSizeX <= minBeforeDeath|| playerSizeY <= minBeforeDeath)
+        if(playerSizeX <= minBeforeDeath || playerSizeY <= minBeforeDeath)
         {
             Death();
         }
