@@ -25,10 +25,8 @@ public class EnemyController : MonoBehaviour {
     float damage = 10;
 
     private GameObject player;
-    private GameObject ui;
 
     private PlayerMovement playerScript;
-    private ScoreCounter scoreScript;
 
     public float worthInPoints = 10;
 
@@ -44,8 +42,6 @@ public class EnemyController : MonoBehaviour {
         healthBarBG.enabled = false;
         player = GameObject.Find("Player");
         playerScript = player.GetComponent<PlayerMovement>();
-        ui = GameObject.Find("UI");
-        scoreScript = ui.GetComponent<ScoreCounter>();
 
     }
 
@@ -108,7 +104,6 @@ public class EnemyController : MonoBehaviour {
     {
         Destroy(gameObject);
         Debug.Log("Enemy died!");
-        scoreScript.AddScore(worthInPoints);
     }
 
     private void OnCollisionStay2D(Collision2D collision)

@@ -51,7 +51,9 @@ public class PlayerMovement : MonoBehaviour {
         playerSizeX = transform.localScale.x;
         playerSizeY = transform.localScale.y;
         minBeforeDeath = playerSizeX / 2;
-	}
+        quitScreen.SetActive(false);
+        Time.timeScale = 1;
+    }
 
 	void FixedUpdate () {
 
