@@ -30,6 +30,7 @@ public class PlayerAttackScript : MonoBehaviour
                 {
                     playermoverscript.dealtDamage = true;
                     enemyScript.TakeDamage(playermoverscript.damage);
+                    enemyScript.TakeKnockBack(playermoverscript.direction, playermoverscript.knockback);
                 }
             }
         }

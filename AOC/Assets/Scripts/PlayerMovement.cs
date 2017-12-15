@@ -7,22 +7,21 @@ public class PlayerMovement : MonoBehaviour {
 
     [SerializeField]
     private GameObject quitScreen;
-
     [SerializeField]
     GameObject enemy;
-
     [SerializeField]
     Rigidbody2D rb;
-
     [SerializeField]
     GameObject sword;
-
     [SerializeField]
     GameObject swordObject;
-
     [SerializeField]
     float movementSpeed = 10f;
-
+    [SerializeField]
+    float attackdelay = 0.2f;
+    [SerializeField]
+    float damageDelay = 0.5f;
+    public float knockback = 5f;
     public float damage = 10;
 
     public KeyCode Left = KeyCode.A;
@@ -32,6 +31,8 @@ public class PlayerMovement : MonoBehaviour {
     public KeyCode AttackKey = KeyCode.Space;
 
     private float attackTime = 0f;
+    private float damageTime = 0f;
+    public float direction;
 
     [SerializeField]
     private bool isAttacked = false;
@@ -58,21 +59,33 @@ public class PlayerMovement : MonoBehaviour {
 	void FixedUpdate () {
 
         attackTime -= Time.deltaTime;
+        damageTime -= Time.deltaTime;
+
+        if (attackTime < 0)
+        {
+            isAttacking = false;
+            dealtDamage = false;
+            sword.SetActive(false);
+        }
+
         CheckControls();
         UpdateScale();
     }
 
     private void CheckControls()
     {
+
         if (Input.GetKey(Left))
         {
             rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 180);
+            direction = 180;
         }
         else if (Input.GetKey(Right))
         {
             rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 0);
+            direction = 0;
         }
         else
         {
@@ -83,11 +96,13 @@ public class PlayerMovement : MonoBehaviour {
         {
             rb.velocity = new Vector2(rb.velocity.x, movementSpeed);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 90);
+            direction = 90;
         }
         else if (Input.GetKey(Down))
         {
             rb.velocity = new Vector2(rb.velocity.x, -movementSpeed);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 270);
+            direction = 270;
         }
         else
         {
@@ -98,7 +113,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             if (attackTime < 0f && isAttacked == false)
             {
-                attackTime = 0.1f;
+                attackTime = attackdelay;
                 sword.SetActive(true);
                 isAttacked = true;
                 isAttacking = true;
@@ -108,21 +123,18 @@ public class PlayerMovement : MonoBehaviour {
         {
             isAttacked = false;
         }
-        if (attackTime < 0)
-        {
-            isAttacking = false;
-            dealtDamage = false;
-            sword.SetActive(false);
-        }
     }
 
     public void TakeDamage(float amount)
     {
         float damageDealtX = amount/100;
         float damageDealtY = amount/100;
-        
-        playerSizeX -= damageDealtX;
-        playerSizeY -= damageDealtY;
+        if (damageTime < 0)
+        {
+            playerSizeX -= damageDealtX;
+            playerSizeY -= damageDealtY;
+            damageTime = damageDelay;
+        }
     }
 
     private void UpdateScale()

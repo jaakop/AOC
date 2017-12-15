@@ -24,6 +24,9 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     float damage = 10;
 
+    [SerializeField]
+    private Rigidbody2D rb;
+
     private GameObject player;
 
     private PlayerMovement playerScript;
@@ -49,11 +52,12 @@ public class EnemyController : MonoBehaviour {
     {
         UpdateHealthBar();
         Move();
+
+        attackWait -= Time.deltaTime;
     }
 
     private void Move()
     {
-        attackWait -= Time.deltaTime;
         if (Vector3.Distance(transform.position, player.transform.position) > distance)
         {
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed);
@@ -115,5 +119,26 @@ public class EnemyController : MonoBehaviour {
 
         }
     }
+
+    public void TakeKnockBack(float direction, float amount)
+    {
+        if(direction == 0)
+        {
+            rb.velocity = new Vector2(amount, 0);
+        }
+        else if (direction == 90)
+        {
+            rb.velocity = new Vector2(0, amount);
+        }
+        else if (direction == 180)
+        {
+            rb.velocity = new Vector2(-amount, 0);
+        }
+        else if (direction == 270)
+        {
+            rb.velocity = new Vector2(0, -amount);
+        }
+    }
+
 
 }
