@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField]
     private GameObject quitScreen;
     [SerializeField]
+    Animator playerAnimator;
+    [SerializeField]
     GameObject enemy;
     [SerializeField]
     Rigidbody2D rb;
@@ -49,14 +51,19 @@ public class PlayerMovement : MonoBehaviour {
 
     void Start ()
     {
+        direction = 270f;
+
         playerSizeX = transform.localScale.x;
         playerSizeY = transform.localScale.y;
         minBeforeDeath = playerSizeX / 2;
         quitScreen.SetActive(false);
         Time.timeScale = 1;
     }
-
-	void FixedUpdate () {
+    private void Update()
+    {
+        playerAnimator.SetFloat("Direction", direction);
+    }
+    void FixedUpdate () {
 
         attackTime -= Time.deltaTime;
         damageTime -= Time.deltaTime;
@@ -67,9 +74,8 @@ public class PlayerMovement : MonoBehaviour {
             dealtDamage = false;
             sword.SetActive(false);
         }
-
-        CheckControls();
         UpdateScale();
+        CheckControls();
     }
 
     private void CheckControls()
@@ -80,12 +86,14 @@ public class PlayerMovement : MonoBehaviour {
             rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 180);
             direction = 180;
+            //playerAnimator.SetFloat("Direction", direction);
         }
         else if (Input.GetKey(Right))
         {
             rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 0);
             direction = 0;
+            //playerAnimator.SetFloat("Direction", direction);
         }
         else
         {
@@ -97,12 +105,14 @@ public class PlayerMovement : MonoBehaviour {
             rb.velocity = new Vector2(rb.velocity.x, movementSpeed);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 90);
             direction = 90;
+            //playerAnimator.SetFloat("Direction", direction);
         }
         else if (Input.GetKey(Down))
         {
             rb.velocity = new Vector2(rb.velocity.x, -movementSpeed);
             swordObject.transform.eulerAngles = new Vector3(0, 0, 270);
             direction = 270;
+            //playerAnimator.SetFloat("Direction", direction);
         }
         else
         {
