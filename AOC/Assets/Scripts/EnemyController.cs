@@ -33,10 +33,19 @@ public class EnemyController : MonoBehaviour {
 
     public float worthInPoints = 10;
 
-    private bool isAttacking = false;
+    private float flashingWait;
+    [SerializeField]
+    private float flashingTime = 0;
+
     private float attackWait;
     [SerializeField]
     private float attackRate;
+
+    [SerializeField]
+    Transform sprite;
+    SpriteRenderer renderer;
+
+    float flashingDelay;
 
     void Start ()
     {
@@ -45,7 +54,7 @@ public class EnemyController : MonoBehaviour {
         healthBarBG.enabled = false;
         player = GameObject.Find("Player");
         playerScript = player.GetComponent<PlayerMovement>();
-
+        renderer = sprite.GetComponent<SpriteRenderer>();
     }
 
 	void FixedUpdate ()
@@ -54,17 +63,37 @@ public class EnemyController : MonoBehaviour {
         Move();
 
         attackWait -= Time.deltaTime;
+        flashingWait -= Time.deltaTime;
+        flashingDelay -= Time.deltaTime;
+        if(flashingWait >= 0)
+        {
+            Debug.Log("1");
+            if (flashingDelay <= 0)
+            {
+                renderer.enabled = false;
+                flashingDelay = .1f;
+                Debug.Log("disabled");
+            }
+            else if(flashingDelay >= 0)
+            {
+                renderer.enabled = true;
+            }
+        }
+        else
+        {
+            renderer.enabled = true;
+        }
     }
 
     private void Move()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) > distance)
+        if (Vector3.Distance(transform.position, player.transform.position) > distance && flashingWait/2 <= 0)
         {
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed);
         }
         else
         {
-            if (attackWait <= 0)
+            if (attackWait <= 0 && flashingWait <= 0)
                 transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed/4f);
         }
     }
@@ -96,7 +125,12 @@ public class EnemyController : MonoBehaviour {
 
     public void TakeDamage(float damage)
     {
-        curHealth -= damage;
+        if (flashingWait <= 0)
+        {
+            curHealth -= damage;
+            UpdateHealthBar();
+            flashingWait = flashingTime;
+        }
     }
 
     public void Heal(float amount)
@@ -112,7 +146,7 @@ public class EnemyController : MonoBehaviour {
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject == player)
+        if(collision.gameObject == player && flashingWait <= 0)
         {
             attackWait = attackRate;
             playerScript.TakeDamage(damage);

@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private float attackTime = 0f;
     private float damageTime = 0f;
-    public float direction;
+    public float direction = 270f;
 
     [SerializeField]
     private bool isAttacked = false;
@@ -76,6 +76,7 @@ public class PlayerMovement : MonoBehaviour {
         }
         UpdateScale();
         CheckControls();
+        swordObject.transform.eulerAngles = new Vector3(0, 0, direction);
     }
 
     private void CheckControls()
@@ -84,14 +85,12 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(Left))
         {
             rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-            swordObject.transform.eulerAngles = new Vector3(0, 0, 180);
             direction = 180;
             //playerAnimator.SetFloat("Direction", direction);
         }
         else if (Input.GetKey(Right))
         {
             rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
-            swordObject.transform.eulerAngles = new Vector3(0, 0, 0);
             direction = 0;
             //playerAnimator.SetFloat("Direction", direction);
         }
@@ -103,14 +102,12 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(Up))
         {
             rb.velocity = new Vector2(rb.velocity.x, movementSpeed);
-            swordObject.transform.eulerAngles = new Vector3(0, 0, 90);
             direction = 90;
             //playerAnimator.SetFloat("Direction", direction);
         }
         else if (Input.GetKey(Down))
         {
             rb.velocity = new Vector2(rb.velocity.x, -movementSpeed);
-            swordObject.transform.eulerAngles = new Vector3(0, 0, 270);
             direction = 270;
             //playerAnimator.SetFloat("Direction", direction);
         }
